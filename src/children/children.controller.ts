@@ -13,18 +13,28 @@ export class ChildrenController {
   }
 
   @Put('/:id/toys/:toysid')
-  AddChildrenToToy(
+  async AddChildrenToToy(
     @Param('id') childId: string,
     @Param('toysid') toyId: string,
   ) {
+    let child = await this.childrenService.findOne(+childId);
+    let toy = await this.childrenService.findOne(+toyId);
+    if(!child || !toy) {
+      throw new NotFoundException(`Child or Toy not found`);
+    }
     return this.childrenService.AddChildrenToToy({childId: +childId, toyId: +toyId});
   }
   
   @Delete('/:id/toys/:toysid')
-  RemoveChildrenFromToy(
+  async RemoveChildrenFromToy(
     @Param('id') childId: string,
     @Param('toysid') toyId: string,
   ) {
+    let child = await this.childrenService.findOne(+childId);
+    let toy = await this.childrenService.findOne(+toyId);
+    if(!child || !toy) {
+      throw new NotFoundException(`Child or Toy not found`);
+    }
     return this.childrenService.RemoveChildrenFromToy({childId: +childId, toyId: +toyId});
   }
 
