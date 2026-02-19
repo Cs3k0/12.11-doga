@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import path from 'node:path';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -22,6 +23,14 @@ async function bootstrap() {
   app.setBaseViewsDir(path.join(__dirname, '..', '..', 'views'));
 
   app.setViewEngine('ejs');
+
+    const config = new DocumentBuilder()
+    .setTitle('mikulas')
+    .setDescription('Backend documentation')
+    .addBearerAuth()
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('mikulas', app, documentFactory);
 
   await app.listen(process.env.PORT ?? 3000);
 }
